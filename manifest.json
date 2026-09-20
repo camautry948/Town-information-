@@ -1,9 +1,0 @@
-{
-  "name": "Municipal Finance & Payroll Resource Hub",
-  "short_name": "Gov Resource Hub",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#f6f8fa",
-  "theme_color": "#16324f",
-  "description": "Official municipal payroll, tax, retirement and government accounting resource links."
-}
