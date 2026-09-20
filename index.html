@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#173b57">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Municipal Hub">
+<title>Municipal Finance & Payroll Resource Hub</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{
+ --navy:#173b57;--blue:#236c98;--light:#eef6fa;--bg:#f5f7f9;--card:#fff;
+ --ink:#16212b;--muted:#667481;--line:#dce4e9;--green:#166a46;--amber:#8a6200;
+ --r:17px;
+}
+*{box-sizing:border-box} html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button,input,select{font:inherit} a{color:inherit}.app{max-width:1120px;margin:auto}
+header{background:linear-gradient(135deg,#173b57,#236c98);color:#fff;padding:calc(22px + env(safe-area-inset-top)) 16px 22px}
+header h1{font-size:23px;line-height:1.12;margin:0 0 7px}header p{margin:0;color:#dcecf6;font-size:13px;line-height:1.45}
+.stamp{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:rgba(255,255,255,.12);border-radius:999px;padding:7px 10px;font-size:11px}
+.stamp i{display:block;width:8px;height:8px;background:#79dfa6;border-radius:50%}
+.toolbar{position:sticky;top:0;z-index:20;background:rgba(245,247,249,.96);padding:12px 12px 6px;border-bottom:1px solid rgba(220,228,233,.7)}
+.search,.select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink);padding:10px 13px;font-size:16px;outline:none}
+.search:focus,.select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(35,108,152,.12)}
+.nav{display:flex;gap:7px;overflow:auto;padding:9px 0 3px;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}
+.nav button,.chipbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;white-space:nowrap;font-size:12px;font-weight:800;color:#3d4b57;min-height:40px}
+.nav button.active,.chipbtn.active{background:var(--navy);border-color:var(--navy);color:#fff}
+main{padding:8px 12px 90px}section{margin-top:18px}
+h2{font-size:20px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:3px}.section-title{margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;min-width:0}
+.card h3{font-size:15px;margin:0 0 5px}.card p{font-size:12.5px;line-height:1.45;color:var(--muted);margin:5px 0}
+.label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:900}
+.big{font-size:28px;font-weight:850;color:var(--navy);letter-spacing:-.04em}
+.linklist{display:grid;gap:7px;margin-top:9px}
+.link{display:flex;align-items:center;justify-content:space-between;gap:9px;text-decoration:none;border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 11px;min-height:44px;font-size:12.5px;font-weight:760}
+.link span:last-child{color:var(--blue);flex:0 0 auto}.link:active,.resource-card:active{transform:scale(.995)}
+.state-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.state-btn{background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px;text-align:left;min-height:90px}
+.state-btn strong{display:block;font-size:15px}.state-btn span{display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.35}
+.state-btn .abbr{width:36px;height:36px;display:grid;place-items:center;background:var(--light);color:var(--navy);border-radius:10px;margin-bottom:8px;font-weight:900}
+.state-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.state-logo{width:48px;height:48px;display:grid;place-items:center;background:var(--navy);color:#fff;border-radius:13px;font-size:16px;font-weight:900}
+.categories{display:flex;gap:7px;overflow:auto;padding:2px 0 5px;scrollbar-width:none}.categories::-webkit-scrollbar{display:none}
+.resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.resource-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px;text-decoration:none;display:block;min-height:115px}
+.resource-card .icon{font-size:20px;margin-bottom:8px}.resource-card strong{font-size:14px;display:block}.resource-card small{display:block;color:var(--muted);font-size:11.5px;line-height:1.4;margin-top:5px}
+.badge{display:inline-flex;margin-top:9px;background:var(--light);border:1px solid #d4e8f3;color:#315b74;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800}
+.callout{border-radius:14px;padding:12px;font-size:12px;line-height:1.5;background:#fff9eb;border:1px solid #eedcae;color:#6b4b04}
+.callout.green{background:#f0faf5;border-color:#cce9d9;color:#24593e}
+.checks{display:grid;gap:8px}.check{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px;font-size:12.5px}.check b{display:block;margin-bottom:2px}.check span{color:var(--muted);font-size:11.5px;line-height:1.4}
+.hidden{display:none!important}.empty{padding:24px;border:1px dashed var(--line);border-radius:14px;background:#fff;color:var(--muted);text-align:center;font-size:13px}
+footer{text-align:center;padding:10px 14px 35px;color:var(--muted);font-size:11px;line-height:1.5}
+
+.calc-total{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:9px 0;font-size:13px}
+.calc-total:last-child{border-bottom:0}.calc-total strong{font-size:14px}
+.warn{background:#fff4f1;border:1px solid #f0d1c7;color:#7d3427;border-radius:12px;padding:10px;font-size:12px;line-height:1.45}
+
+
+.jobHero{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.jobIcon{width:52px;height:52px;display:grid;place-items:center;border-radius:14px;background:var(--light);font-size:25px;flex:0 0 auto}
+.timeline{display:grid;gap:9px;margin-top:10px}
+.taskrow{display:grid;grid-template-columns:110px 1fr;gap:10px;border:1px solid var(--line);border-radius:13px;background:#fff;padding:11px}
+.taskfreq{font-size:11px;font-weight:900;color:var(--navy);text-transform:uppercase;letter-spacing:.05em}
+.taskrow b{display:block;font-size:13px;margin-bottom:3px}.taskrow span{display:block;font-size:11.5px;color:var(--muted);line-height:1.45}
+.guideStep{border-left:3px solid var(--blue);padding:2px 0 2px 11px;margin:11px 0}
+.guideStep b{display:block;font-size:13px}.guideStep span{font-size:11.5px;color:var(--muted);line-height:1.45}
+@media(max-width:760px){.taskrow{grid-template-columns:1fr}.taskfreq{margin-bottom:-3px}}
+
+@media(max-width:760px){.state-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid,.resources{grid-template-columns:1fr}}
+@media(min-width:900px){header{border-radius:0 0 24px 24px}.resources{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>Municipal Finance & Payroll Resource Hub</h1>
+  <p>A support desk for town payroll, accounting, tax filing, retirement and government finance resources.</p>
+  <div class="stamp"><i></i>Reference links reviewed September 19, 2026</div>
+</header>
+
+<div class="toolbar">
+  <input id="search" class="search" type="search" placeholder="Search W-2, retirement, unemployment, withholding…" aria-label="Search resources">
+  <div class="nav">
+    <button class="active" data-view="jobguide">Job Guide</button>
+    <button data-view="home">Resources</button>
+    <button data-view="states">State Center</button>
+    <button data-view="federal">Federal</button>
+    <button data-view="training">Training</button>
+    <button data-view="yearend">Year-End</button>
+    <button data-view="calculator">Payroll Assistant</button>
+    <button data-view="updates">Updates</button>
+  </div>
+</div>
+
+<main>
+
+<section class="view" data-view="jobguide">
+  <div class="section-title"><h2>What is your job?</h2><div class="sub">Choose your responsibility area and this site will walk you through the work.</div></div>
+  <div class="callout green"><b>Purpose:</b> This section is for town employees—not software support staff. It explains what should be done, when it should be done, what should be checked, and which official agency sets the rule.</div>
+
+  <div style="margin-top:12px">
+    <select id="jobSelect" class="select" aria-label="Choose municipal job area"></select>
+  </div>
+
+  <div id="jobGuideContent" style="margin-top:12px"></div>
+</section>
+
+<section class="view hidden" data-view="home">
+  <div class="section-title"><h2>Federal payroll quick reference</h2><div class="sub">2026 • verify current publication before changing payroll configuration</div></div>
+  <div class="grid">
+    <div class="card searchable" data-search="social security fica 6.2 wage base"><div class="label">Social Security</div><div class="big">6.2%</div><p>Employee rate; employer matches 6.2%. 2026 Social Security wage base: <b>$184,500</b>.</p></div>
+    <div class="card searchable" data-search="medicare fica 1.45"><div class="label">Medicare</div><div class="big">1.45%</div><p>Employee rate; employer matches 1.45%. No regular Medicare wage-base limit.</p></div>
+    <div class="card searchable" data-search="additional medicare .9 200000"><div class="label">Additional Medicare</div><div class="big">0.9%</div><p>Employee withholding on wages paid above $200,000 in the calendar year. No employer match.</p></div>
+    <div class="card searchable" data-search="federal withholding publication 15t tax table"><h3>Federal withholding</h3><p>Use IRS Publication 15-T for current federal withholding methods and tables.</p><div class="linklist"><a class="link" target="_blank" rel="noopener" href="https://www.irs.gov/publications/p15t"><span>Publication 15-T</span><span>↗</span></a><a class="link" target="_blank" rel="noopener" href="https://www.irs.gov/publications/p15"><span>Publication 15 / Circular E</span><span>↗</span></a></div></div>
+  </div>
+
+  <section>
+    <div class="section-title"><h2>Choose a state</h2><div class="sub">Open its municipal support dashboard</div></div>
+    <div id="homeStates" class="state-grid"></div>
+  </section>
+
+  <section><div class="callout"><b>Why this version is different:</b> links are organized by the task a support employee is trying to complete—Payroll, Retirement, Unemployment, W-2/1099, New Hire, Taxes/Revenue, Business/Local Government, and Training—rather than by agency name alone.</div></section>
+</section>
+
+<section class="view hidden" data-view="states">
+  <div class="section-title"><h2>State Resource Center</h2><div class="sub">Official resources arranged by municipal support task</div></div>
+  <select id="stateSelect" class="select" aria-label="Choose state"></select>
+  <div id="stateContent"></div>
+</section>
+
+<section class="view hidden" data-view="federal">
+  <div class="section-title"><h2>Federal Resource Center</h2><div class="sub">Payroll, reporting and employment resources</div></div>
+  <div id="federalResources" class="resources"></div>
+</section>
+
+<section class="view hidden" data-view="training">
+  <div class="section-title"><h2>Government Finance Training</h2><div class="sub">Accounting standards, courses and professional development</div></div>
+  <div class="resources">
+    <a class="resource-card searchable" data-search="gfoa accounting courses training" target="_blank" rel="noopener" href="https://www.gfoa.org/accounting-courses"><div class="icon">🎓</div><strong>GFOA Accounting Courses</strong><small>Governmental accounting classes from foundational through advanced topics.</small><span class="badge">Training</span></a>
+    <a class="resource-card searchable" data-search="gfoa accounting academy cpe" target="_blank" rel="noopener" href="https://www.gfoa.org/accounting-academy"><div class="icon">🏫</div><strong>GFOA Accounting Academy</strong><small>Structured governmental accounting instruction and CPE opportunities.</small><span class="badge">Training</span></a>
+    <a class="resource-card searchable" data-search="gfoa training catalog budget procurement debt" target="_blank" rel="noopener" href="https://www.gfoa.org/training-catalog"><div class="icon">📚</div><strong>GFOA Training Catalog</strong><small>Accounting, budgeting, procurement, debt, ERP and public finance topics.</small><span class="badge">Training</span></a>
+    <a class="resource-card searchable" data-search="gasb accounting standards government" target="_blank" rel="noopener" href="https://www.gasb.org/"><div class="icon">📘</div><strong>GASB</strong><small>Official governmental accounting standards and implementation resources.</small><span class="badge">Standards</span></a>
+  </div>
+</section>
+
+<section class="view hidden" data-view="yearend">
+  <div class="section-title"><h2>Payroll Year-End Center</h2><div class="sub">Use this as a support checklist before closing a payroll year</div></div>
+  <div class="checks searchable" data-search="year end w2 w3 1099 tax tables retirement">
+    <div class="check"><div>①</div><div><b>Confirm next-year tax tables</b><span>Federal Publication 15-T plus the employee's applicable state withholding publication.</span></div></div>
+    <div class="check"><div>②</div><div><b>Confirm Social Security limits</b><span>Update FICA wage limits and verify any other annual payroll limits in your software configuration.</span></div></div>
+    <div class="check"><div>③</div><div><b>Verify retirement rates</b><span>Use the participating retirement system's employer resources. Do not assume every municipality or employee class uses the same contribution rate.</span></div></div>
+    <div class="check"><div>④</div><div><b>Prepare W-2/W-3 files</b><span>Use SSA employer services and the applicable state wage-statement filing instructions.</span></div></div>
+    <div class="check"><div>⑤</div><div><b>Prepare 1099 files</b><span>Review IRS information-return instructions and the state's 1099 filing requirements.</span></div></div>
+    <div class="check"><div>⑥</div><div><b>Reconcile payroll liabilities</b><span>Compare payroll registers, quarterly returns, deposits, W-2 totals and general-ledger control accounts.</span></div></div>
+  </div>
+  <div class="resources" style="margin-top:12px">
+    <a class="resource-card searchable" data-search="ssa w2 w3" target="_blank" rel="noopener" href="https://www.ssa.gov/employer/"><div class="icon">🧾</div><strong>SSA W-2/W-3</strong><small>Federal wage-reporting resources.</small></a>
+    <a class="resource-card searchable" data-search="irs iris 1099" target="_blank" rel="noopener" href="https://www.irs.gov/filing/e-file-information-returns-with-iris"><div class="icon">📄</div><strong>IRS IRIS</strong><small>Electronic filing for information returns.</small></a>
+  </div>
+</section>
+
+
+<section class="view hidden" data-view="calculator">
+  <div class="section-title"><h2>Payroll Setup Assistant</h2><div class="sub">2026 troubleshooting calculator for municipal payroll support</div></div>
+
+  <div class="callout green"><b>What this tool calculates:</b> Social Security, Medicare, Additional Medicare threshold withholding, employee retirement contribution, and entered deductions. Federal and state income-tax withholding are intentionally handled as guided table lookups unless all required withholding-certificate information is available.</div>
+
+  <div class="grid" style="margin-top:11px">
+    <div class="card">
+      <h3>1. Employee & pay setup</h3>
+      <div style="display:grid;gap:9px;margin-top:10px">
+        <label class="label" for="calcState">Work state</label>
+        <select id="calcState" class="select"></select>
+
+        <label class="label" for="calcFreq">Pay frequency</label>
+        <select id="calcFreq" class="select">
+          <option value="52">Weekly — 52</option>
+          <option value="26" selected>Biweekly — 26</option>
+          <option value="24">Semimonthly — 24</option>
+          <option value="12">Monthly — 12</option>
+        </select>
+
+        <label class="label" for="grossPay">Gross wages this check</label>
+        <input id="grossPay" class="search" type="number" inputmode="decimal" min="0" step="0.01" value="2000">
+
+        <label class="label" for="ssTaxable">Social Security taxable wages this check</label>
+        <input id="ssTaxable" class="search" type="number" inputmode="decimal" min="0" step="0.01" value="2000">
+
+        <label class="label" for="medTaxable">Medicare taxable wages this check</label>
+        <input id="medTaxable" class="search" type="number" inputmode="decimal" min="0" step="0.01" value="2000">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>2. Year-to-date & deductions</h3>
+      <div style="display:grid;gap:9px;margin-top:10px">
+        <label class="label" for="ssYtd">Social Security wages YTD before this check</label>
+        <input id="ssYtd" class="search" type="number" inputmode="decimal" min="0" step="0.01" value="0">
+
+        <label class="label" for="medYtd">Medicare wages YTD before this check</label>
+        <input id="medYtd" class="search" type="number" inputmode="decimal" min="0" step="0.01" value="0">
+
+        <label class="label" for="retRate">Employee retirement contribution %</label>
+        <input id="retRate" class="search" type="number" inputmode="decimal" min="0" max="100" step="0.01" value="0">
+
+        <label class="label" for="otherDed">Other known employee deductions this check</label>
+        <input id="otherDed" class="search" type="number" inputmode="decimal" min="0" step="0.01" value="0">
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:11px">
+    <h3>3. Withholding certificate checklist</h3>
+    <div class="grid" style="margin-top:9px">
+      <div>
+        <label class="label" for="fedStatus">Federal W-4 filing status</label>
+        <select id="fedStatus" class="select">
+          <option>Single or Married filing separately</option>
+          <option>Married filing jointly</option>
+          <option>Head of household</option>
+        </select>
+      </div>
+      <div>
+        <label class="label" for="step2">W-4 Step 2 checkbox</label>
+        <select id="step2" class="select">
+          <option value="no">Not checked</option>
+          <option value="yes">Checked</option>
+        </select>
+      </div>
+      <div>
+        <label class="label" for="dependents">W-4 Step 3 credits</label>
+        <input id="dependents" class="search" type="number" inputmode="decimal" min="0" step="0.01" value="0">
+      </div>
+      <div>
+        <label class="label" for="extraWh">W-4 Step 4(c) extra withholding</label>
+        <input id="extraWh" class="search" type="number" inputmode="decimal" min="0" step="0.01" value="0">
+      </div>
+    </div>
+    <p style="margin-top:10px">For an exact federal income-tax result, Publication 15-T can also require Step 4(a) other income, Step 4(b) deductions, and whether the W-4 is a 2020-or-later form. This assistant keeps those items visible rather than guessing.</p>
+  </div>
+
+  <button id="runCalc" type="button" style="width:100%;margin-top:12px;border:0;border-radius:14px;background:var(--navy);color:#fff;min-height:50px;font-weight:850">Calculate payroll reference</button>
+
+  <div id="calcResults" style="margin-top:12px"></div>
+</section>
+
+<section class="view hidden" data-view="updates">
+  <div class="section-title"><h2>Annual Update Center</h2><div class="sub">A place for your support team to check before loading a new payroll year</div></div>
+  <div class="callout green"><b>Current build:</b> 2026 reference links are loaded. As agencies publish 2027 payroll tables and retirement contribution schedules, this screen can become the checklist your support staff uses to update your software's tax configuration.</div>
+  <div class="grid" style="margin-top:11px">
+    <div class="card searchable" data-search="2027 federal update"><h3>Federal 2027 watch</h3><p>Publication 15-T, Social Security wage base, mileage/per-diem items if needed, and other annual payroll limits.</p><span class="badge">Future update</span></div>
+    <div class="card searchable" data-search="2027 states tax tables update"><h3>State 2027 watch</h3><p>VA, TN, NC, SC, GA, AL and WV withholding publications, wage-statement instructions and unemployment updates.</p><span class="badge">Future update</span></div>
+    <div class="card searchable" data-search="retirement fiscal year rates update"><h3>Retirement fiscal-year watch</h3><p>Track new employer and member contribution schedules by retirement system and effective date.</p><span class="badge">Fiscal-year update</span></div>
+    <div class="card searchable" data-search="support software configuration checklist"><h3>Software configuration checklist</h3><p>After official rates are verified: update test company → calculate sample payroll → compare to official examples → release configuration.</p><span class="badge">Support workflow</span></div>
+  </div>
+</section>
+
+<div id="noResults" class="empty hidden">No matching resource found. Try a state name or terms such as withholding, retirement, unemployment, W-2, 1099, new hire or training.</div>
+</main>
+<footer>This application is a reference launcher. Always confirm the effective date and applicability on the official linked source before changing payroll, tax or retirement configuration.</footer>
+</div>
+
+<script>
+const S={
+VA:{name:"Virginia",note:"Virginia withholding applies. Current state resources include employer filing and W-2/1099 guidance.",quick:"VA withholding applies",cats:{
+"Payroll":[["Virginia Withholding Tax","Employer withholding, filing requirements and payment guidance.","https://www.tax.virginia.gov/withholding-tax"],["Employer Withholding Tables","Official Virginia employer withholding tables.","https://www.tax.virginia.gov/sites/default/files/taxforms/withholding/any/employer-withholding-tables-july-2025-and-later-any.pdf"],["Virginia Tax Online Services","State tax filing and online-service information.","https://www.tax.virginia.gov/online-services"]],
+"Retirement":[["VRS Contribution Rates","Employer contribution-rate resources.","https://employers.varetire.org/financial-reporting/contribution-rates/"],["Virginia Retirement System","Plan and member resources.","https://www.varetire.org/"]],
+"Unemployment":[["Virginia Employment Commission","Employer unemployment insurance and workforce resources.","https://www.vec.virginia.gov/"]],
+"W-2 / 1099":[["Virginia W-2/1099 Guidance","Wage and information-return filing guidance through Virginia Tax.","https://www.tax.virginia.gov/withholding-tax"],["Virginia W-2 eForm","Virginia electronic W-2 filing form.","https://www.business.tax.virginia.gov/tax-eforms/w2.php"]],
+"New Hire":[["Virginia New Hire Reporting","State new-hire reporting portal.","https://va-newhire.com/"]],
+"Taxes / Revenue":[["Virginia Tax","State tax agency home.","https://www.tax.virginia.gov/"],["Virginia Tax Forms","Official forms library.","https://www.tax.virginia.gov/forms"]],
+"Business / Local Gov":[["Virginia Business Registration","State tax registration resource.","https://www.tax.virginia.gov/register"],["Virginia.gov Business","State business resources.","https://www.virginia.gov/services/business/"]],
+"Training":[["Virginia GFOA","Government finance professional association resources.","https://www.vgfoa.org/"]]
+}},
+TN:{name:"Tennessee",note:"Tennessee has no state individual income tax on earned wages, so there is no state wage-withholding table.",quick:"No state wage withholding",cats:{
+"Payroll":[["TN Withholding Guidance","Official explanation of Tennessee income-tax withholding status.","https://revenue.support.tn.gov/hc/en-us/articles/360057595051-GEN-34-Income-Tax-Withholding"],["Tennessee Department of Revenue","State revenue agency resources.","https://www.tn.gov/revenue.html"]],
+"Retirement":[["Tennessee Consolidated Retirement System","TCRS employer and member resources.","https://treasury.tn.gov/Retirement"]],
+"Unemployment":[["TN Department of Labor & Workforce Development","Employer unemployment and workforce resources.","https://www.tn.gov/workforce.html"]],
+"W-2 / 1099":[["Tennessee Department of Revenue","Use state guidance for applicable information-return obligations.","https://www.tn.gov/revenue.html"],["SSA Employer W-2 Filing","Federal W-2/W-3 filing resources.","https://www.ssa.gov/employer/"]],
+"New Hire":[["Tennessee New Hire Reporting","State new-hire reporting portal.","https://www.tnnewhire.com/"]],
+"Taxes / Revenue":[["TNTAP","Tennessee Taxpayer Access Point.","https://tntap.tn.gov/eservices/_/"],["Tennessee Revenue","State tax information.","https://www.tn.gov/revenue.html"]],
+"Business / Local Gov":[["Tennessee Business Services","State business services portal.","https://tnbear.tn.gov/Ecommerce/RegistrationInstr.aspx"],["Tennessee Comptroller","Local government and public finance resources.","https://comptroller.tn.gov/"]],
+"Training":[["TGFOA","Tennessee Government Finance Officers Association.","https://tgfoa.org/"]]
+}},
+NC:{name:"North Carolina",note:"North Carolina publishes an annual NC-30 employer withholding publication.",quick:"2026 NC-30 available",cats:{
+"Payroll":[["NC-30 Withholding Tables","Official employer withholding tables and instructions.","https://www.ncdor.gov/income-tax-withholding-tables-and-instructions-employers"],["NCDOR Withholding Tax","Employer withholding information.","https://www.ncdor.gov/taxes-forms/withholding-tax"],["NCDOR File & Pay","State tax filing and payment resources.","https://www.ncdor.gov/file-pay"]],
+"Retirement":[["NC Retirement Systems","LGERS and other retirement-system resources.","https://www.myncretirement.com/"],["Employer Resources","NC Retirement Systems employer information.","https://www.myncretirement.com/employers"]],
+"Unemployment":[["NC Division of Employment Security","Employer unemployment insurance resources.","https://www.des.nc.gov/"]],
+"W-2 / 1099":[["NCDOR Withholding Forms","Withholding forms, annual reporting and instructions.","https://www.ncdor.gov/taxes-forms/withholding-tax/withholding-tax-forms-and-instructions"],["SSA Employer W-2 Filing","Federal W-2/W-3 filing.","https://www.ssa.gov/employer/"]],
+"New Hire":[["NC New Hire Directory","State new-hire reporting portal.","https://ncnewhires.ncdhhs.gov/"]],
+"Taxes / Revenue":[["NCDOR","North Carolina Department of Revenue.","https://www.ncdor.gov/"],["Register a Business","Register withholding, sales/use and other accounts.","https://www.ncdor.gov/taxes-forms/register-business"]],
+"Business / Local Gov":[["NC Secretary of State Business Registration","Business registration and entity resources.","https://www.sosnc.gov/divisions/business_registration"],["NC Department of State Treasurer","Local government finance and treasury resources.","https://www.nctreasurer.com/"]],
+"Training":[["NC GFOA","North Carolina Government Finance Officers Association.","https://www.ncgfoa.org/"],["UNC School of Government","Training and resources for local-government professionals.","https://www.sog.unc.edu/"]]
+}},
+SC:{name:"South Carolina",note:"South Carolina publishes annual withholding tables and a withholding formula.",quick:"2026 tables available",cats:{
+"Payroll":[["2026 SC Withholding Forms & Tables","Official 2026 tables, formula and SC W-4 resources.","https://dor.sc.gov/withholding/withholding-forms"],["SCDOR Withholding","Employer withholding information.","https://dor.sc.gov/withholding"],["MyDORWAY","Online state tax account and filing portal.","https://mydorway.dor.sc.gov/"]],
+"Retirement":[["PEBA Contribution Rates","Official retirement contribution-rate schedules.","https://www.peba.sc.gov/contribution-rates"],["South Carolina Retirement System","SCRS plan resources.","https://www.peba.sc.gov/scrs"]],
+"Unemployment":[["SC Department of Employment and Workforce","Employer unemployment insurance resources.","https://dew.sc.gov/"]],
+"W-2 / 1099":[["SC W-2/1099 Forms & Specifications","SCDOR annual wage and information-return instructions.","https://dor.sc.gov/withholding/withholding-forms"],["SSA Employer W-2 Filing","Federal wage reporting.","https://www.ssa.gov/employer/"]],
+"New Hire":[["SC New Hire Reporting","State new-hire reporting portal.","https://newhire.sc.gov/"]],
+"Taxes / Revenue":[["South Carolina Department of Revenue","State tax agency.","https://dor.sc.gov/"],["MyDORWAY","File and manage state taxes online.","https://mydorway.dor.sc.gov/"]],
+"Business / Local Gov":[["SC Business One Stop","State business information and registration resources.","https://scbos.sc.gov/"],["SC State Treasurer","Government finance and treasury resources.","https://treasurer.sc.gov/"]],
+"Training":[["SC GFOA","South Carolina Government Finance Officers Association.","https://scgfoa.org/"]]
+}},
+GA:{name:"Georgia",note:"Georgia publishes an annual Employer's Tax Guide and withholding resources.",quick:"2026 Employer Guide",cats:{
+"Payroll":[["2026 Employer's Tax Guide","Official Georgia withholding guide.","https://dor.georgia.gov/employers-tax-guide"],["Withholding Tax for Employers","Employer withholding resources and forms.","https://dor.georgia.gov/taxes/withholding-tax-employers"],["Georgia Tax Center","Online tax portal.","https://gtc.dor.ga.gov/"]],
+"Retirement":[["Employees' Retirement System of Georgia","State retirement system resources.","https://www.ers.ga.gov/"]],
+"Unemployment":[["Georgia Department of Labor","Employer unemployment and workforce resources.","https://dol.georgia.gov/"]],
+"W-2 / 1099":[["Georgia Withholding / G-1003","State wage and information-statement reporting resources.","https://dor.georgia.gov/taxes/withholding-tax-employers"],["SSA Employer W-2 Filing","Federal wage reporting.","https://www.ssa.gov/employer/"]],
+"New Hire":[["Georgia New Hire Reporting","State new-hire reporting portal.","https://ga-newhire.com/"]],
+"Taxes / Revenue":[["Georgia Department of Revenue","State tax agency.","https://dor.georgia.gov/"],["Georgia Tax Center","File, pay and manage tax accounts.","https://gtc.dor.ga.gov/"]],
+"Business / Local Gov":[["Georgia Secretary of State Corporations","Business entity resources.","https://sos.ga.gov/how-to-guide/how-guide-register-business"],["Georgia Department of Community Affairs","Local-government resources.","https://www.dca.ga.gov/"]],
+"Training":[["Georgia GFOA","Georgia Government Finance Officers Association.","https://ggfoa.org/"]]
+}},
+AL:{name:"Alabama",note:"Alabama publishes employer withholding instructions and state payroll-tax resources.",quick:"Current AL tables",cats:{
+"Payroll":[["Alabama Withholding Tax","Employer withholding guidance.","https://www.revenue.alabama.gov/individual-corporate/withholding-tax-2/"],["Income Tax Withholding","State withholding resources.","https://www.revenue.alabama.gov/tax-types/income-tax-withholding/"],["My Alabama Taxes","Online tax portal.","https://myalabamataxes.alabama.gov/"]],
+"Retirement":[["RSA Employer Resources","Retirement Systems of Alabama employer information.","https://www.rsa-al.gov/employers/ers/"],["Retirement Systems of Alabama","Retirement system home.","https://www.rsa-al.gov/"]],
+"Unemployment":[["Alabama Department of Workforce","Employer unemployment resources.","https://labor.alabama.gov/uc/"]],
+"W-2 / 1099":[["Alabama Department of Revenue","State wage/information-return resources.","https://www.revenue.alabama.gov/"],["SSA Employer W-2 Filing","Federal wage reporting.","https://www.ssa.gov/employer/"]],
+"New Hire":[["Alabama New Hire","State new-hire reporting resources.","https://labor.alabama.gov/nh/"]],
+"Taxes / Revenue":[["Alabama Department of Revenue","State tax agency.","https://www.revenue.alabama.gov/"],["My Alabama Taxes","Online filing and payment portal.","https://myalabamataxes.alabama.gov/"]],
+"Business / Local Gov":[["Alabama Secretary of State Business Services","Business entity resources.","https://www.sos.alabama.gov/business-entities"],["Alabama Department of Examiners of Public Accounts","Local-government and public accounting resources.","https://examiners.alabama.gov/"]],
+"Training":[["GFOA Training Catalog","National governmental finance training.","https://www.gfoa.org/training-catalog"]]
+}},
+WV:{name:"West Virginia",note:"West Virginia publishes employer withholding tables and tax-year resources.",quick:"2026 tables available",cats:{
+"Payroll":[["WV Withholding Forms & Tables","Official employer withholding forms and tables.","https://tax.wv.gov/business/withholding/pages/withholdingtaxforms.aspx"],["WV State Tax Department","State tax resources.","https://tax.wv.gov/"],["WV MyTaxes","Online tax account portal.","https://mytaxes.wvtax.gov/"]],
+"Retirement":[["WV Public Employees Retirement System","PERS plan and contribution resources.","https://www.wvretirement.com/PERS.html"],["WV Consolidated Public Retirement Board","Retirement board resources.","https://www.wvretirement.com/"]],
+"Unemployment":[["WorkForce West Virginia","Employer unemployment and workforce resources.","https://workforcewv.org/"]],
+"W-2 / 1099":[["WV Withholding Forms & Tables","State annual withholding and reporting resources.","https://tax.wv.gov/business/withholding/pages/withholdingtaxforms.aspx"],["SSA Employer W-2 Filing","Federal wage reporting.","https://www.ssa.gov/employer/"]],
+"New Hire":[["WV New Hire Reporting","State new-hire reporting portal.","https://newhire-reporting.com/WV-Newhire/"]],
+"Taxes / Revenue":[["WV State Tax Department","State tax agency.","https://tax.wv.gov/"],["WV MyTaxes","Online filing and payment portal.","https://mytaxes.wvtax.gov/"]],
+"Business / Local Gov":[["WV One Stop Business Portal","State business resources.","https://business4.wv.gov/"],["WV State Auditor Local Government Services","Local-government finance resources.","https://www.wvsao.gov/"]],
+"Training":[["GFOA Training Catalog","National governmental finance training.","https://www.gfoa.org/training-catalog"]]
+}}
+};
+
+const ICONS={"Payroll":"💵","Retirement":"🏛️","Unemployment":"🧑‍💼","W-2 / 1099":"🧾","New Hire":"➕","Taxes / Revenue":"📊","Business / Local Gov":"🏢","Training":"🎓"};
+
+const FED=[
+["IRS Publication 15-T","Federal income-tax withholding methods and tables.","https://www.irs.gov/publications/p15t","💵","Federal Withholding"],
+["IRS Publication 15","Employer's Tax Guide / Circular E.","https://www.irs.gov/publications/p15","📘","Payroll"],
+["IRS Employment Taxes","Federal employer payroll-tax resources.","https://www.irs.gov/businesses/small-businesses-self-employed/employment-taxes","🏛️","Payroll"],
+["EFTPS","Federal tax-deposit payment system.","https://www.eftps.gov/","💳","Payments"],
+["SSA Employer Services","W-2/W-3 filing and employer wage-reporting resources.","https://www.ssa.gov/employer/","🧾","W-2/W-3"],
+["SSA Business Services Online","Social Security business services portal.","https://www.ssa.gov/bso/bsowelcome.htm","🖥️","Wage Reporting"],
+["IRS IRIS","Electronic information-return filing, including supported 1099 series returns.","https://www.irs.gov/filing/e-file-information-returns-with-iris","📄","1099"],
+["IRS Forms & Instructions","Official federal form and publication library.","https://www.irs.gov/forms-instructions-and-publications","📚","Forms"]
+];
+
+
+
+const JOBS={
+ payroll:{
+  name:"Payroll",icon:"💵",
+  intro:"Your job is to pay employees accurately, withhold and remit required taxes and deductions, maintain payroll records, and make sure payroll totals reconcile to the town's accounting records.",
+  tasks:[
+   ["Every pay period","Review time and pay changes","Confirm approved hours, leave, salary/rate changes, new hires, terminations, deductions and one-time adjustments before calculating payroll."],
+   ["Every pay period","Run and review payroll","Compare gross pay, taxable wages, taxes, retirement, benefits and net pay. Investigate unusual amounts before checks/direct deposits are released."],
+   ["After payroll","Post payroll liabilities","Make sure taxes, retirement, insurance and other withheld amounts are recorded as liabilities until they are paid."],
+   ["By deposit schedule","Deposit federal payroll taxes","Federal deposit timing is monthly or semiweekly based on the IRS lookback rules—not simply the town's pay frequency."],
+   ["Monthly / state schedule","File or pay state payroll items","Follow the state's withholding and unemployment filing/payment schedule for your town."],
+   ["Quarterly","File Form 941 and reconcile","Reconcile payroll registers and tax deposits to Form 941 before filing. Standard quarterly due dates are Apr. 30, Jul. 31, Oct. 31 and Jan. 31."],
+   ["Year-end","Prepare W-2/W-3 reporting","Reconcile annual payroll totals, verify employee information, create W-2s and file required federal/state wage reports."],
+   ["Year-end","Load new-year rates","Verify new federal/state withholding tables, Social Security limits and retirement rates before the first payroll of the new year."]
+  ],
+  steps:[
+   ["Before calculating payroll","Do not start with the software. Start with approved source information: time sheets, personnel changes, benefit changes and withholding forms."],
+   ["After calculation","Review exceptions. A payroll that 'processed successfully' can still be wrong."],
+   ["Before posting","Make sure gross wages, employer costs, deductions and liabilities are going to the correct general-ledger accounts."],
+   ["Before filing reports","Reconcile the report to payroll records and prior deposits. Filing a report should be the last step, not the first."]
+  ],
+  links:[
+   ["IRS Publication 15","https://www.irs.gov/publications/p15"],
+   ["IRS Publication 15-T","https://www.irs.gov/publications/p15t"],
+   ["IRS Employment Tax Due Dates","https://www.irs.gov/businesses/small-businesses-self-employed/employment-tax-due-dates"],
+   ["SSA Employer W-2 Filing","https://www.ssa.gov/employer/"]
+  ]
+ },
+ ap:{
+  name:"Accounts Payable",icon:"🧾",
+  intro:"Your job is to make sure the town only pays valid, approved obligations; pays the correct vendor and amount; keeps supporting documentation; and records each expense in the correct accounting period and account.",
+  tasks:[
+   ["As invoices arrive","Review invoices","Confirm vendor, amount, date, purchase/approval documentation, account coding and whether the invoice has already been entered."],
+   ["Before payment","Verify authorization","Follow the town's purchasing and approval policy. An invoice should not be paid just because it was received."],
+   ["Each check/EFT run","Review payment batch","Look for duplicates, unusual amounts, negative invoices, stale credits and incorrect bank/payment information."],
+   ["After payment","Post and retain support","Post the payment to the correct fund/account and retain the invoice, approval and payment record according to policy."],
+   ["Monthly","Reconcile AP liabilities","Review unpaid invoices, old outstanding items, vendor credits and AP control totals against the general ledger."],
+   ["Year-end","Review cutoff and 1099 reporting","Make sure expenses belong in the correct fiscal/calendar period and review vendors/payments for applicable information reporting."]
+  ],
+  steps:[
+   ["Invoice received","Ask: Is this a legitimate town obligation, has it been approved, and is the coding correct?"],
+   ["Invoice entered","Use the invoice number and vendor carefully so duplicate-payment controls can work."],
+   ["Payment selected","Confirm only approved invoices are included in the batch."],
+   ["After payment","Retain a clear audit trail from invoice → approval → accounting entry → payment."]
+  ],
+  links:[["IRS 1099 General Instructions","https://www.irs.gov/instructions/i1099gi"],["GFOA Best Practices","https://www.gfoa.org/best-practices"]]
+ },
+ utility:{
+  name:"Utility Billing",icon:"💧",
+  intro:"Your job is to bill customers accurately, record payments, maintain customer/account information, manage adjustments under town policy, and reconcile billing activity to cash and the general ledger.",
+  tasks:[
+   ["Daily","Process customer/account changes","Document starts, stops, transfers, meter changes and customer information updates."],
+   ["Billing cycle","Review meter/usage data","Look for missing reads, zero usage, unusually high/low usage and service/account exceptions before bills are produced."],
+   ["Billing cycle","Calculate and review bills","Confirm rates, service charges, taxes/fees and adjustments are using the town's approved rate schedule."],
+   ["Daily","Post and balance payments","Balance cash, checks, cards and electronic payments to the system batch before posting."],
+   ["Per policy","Apply penalties / delinquency steps","Follow the town's adopted ordinance/policy for late charges, notices, cutoffs and reconnection."],
+   ["Monthly","Reconcile utility receivables","Reconcile billing, payments, adjustments and ending receivable balances to the general ledger."]
+  ],
+  steps:[
+   ["Before billing","Make sure rate tables and service configurations match the town's officially adopted rates."],
+   ["Before posting a payment batch","Balance the batch to the money actually received."],
+   ["Before an adjustment","Use documented adjustment reasons and required approvals."],
+   ["At month-end","Prove that beginning receivables + charges - payments - credits/adjustments = ending receivables."]
+  ],
+  links:[["GFOA Best Practices","https://www.gfoa.org/best-practices"]]
+ },
+ taxes:{
+  name:"Taxes",icon:"🏠",
+  intro:"Your job is to maintain accurate taxpayer/property records, bill taxes from authorized values and rates, receive and post collections, apply penalties/interest according to law, and reconcile the tax receivable.",
+  tasks:[
+   ["As changes occur","Maintain customer/property records","Document ownership, mailing, account and property changes using authoritative source records."],
+   ["Before billing","Verify tax rates and values","Confirm the governing body's adopted rates and imported/authorized property values before bills are generated."],
+   ["Billing cycle","Review tax bills","Check totals, exemptions/relief, mortgage codes, due dates and sample accounts before releasing the full billing."],
+   ["Daily","Post tax payments","Balance payment batches to receipts/deposits before posting."],
+   ["Scheduled","Apply penalties and interest","Run only according to the state's law and town schedule; verify the effective date and calculation basis first."],
+   ["Monthly","Reconcile tax receivables","Reconcile beginning balance, billings, adjustments, collections, write-offs and ending balance to the GL."],
+   ["Year-end / new levy","Close and set up new tax year","Retain prior-year balances separately, load new authorized values/rates and test before releasing bills."]
+  ],
+  steps:[
+   ["Never guess a tax rule","Use the state's official law/guidance and the town's adopted rate/policy."],
+   ["Before a large batch process","Run totals or test accounts and retain the control report."],
+   ["For adjustments","Document who authorized it, why it was changed and the before/after amount."],
+   ["At reconciliation","The detailed tax account balance should agree with the controlling general-ledger receivable."]
+  ],
+  links:[["GFOA Best Practices","https://www.gfoa.org/best-practices"]]
+ },
+ business:{
+  name:"Business License",icon:"🏢",
+  intro:"Your job is to administer the town's business-license requirements consistently: maintain businesses, calculate fees/taxes under local and state rules, collect renewals, document adjustments and enforce deadlines under adopted policy.",
+  tasks:[
+   ["New application","Verify business information","Confirm legal/business name, location, business activity/classification and required local/state information."],
+   ["Before issuing","Calculate the correct license","Use the town's adopted schedule and applicable state rules—not an old prior-year amount."],
+   ["Renewal cycle","Issue and track renewals","Send notices, receive required information, calculate amounts and track unpaid/late accounts."],
+   ["As needed","Document changes and closures","Record ownership, location, classification and closed-business changes with an audit trail."],
+   ["Monthly","Reconcile collections","Tie receipts and adjustments to the appropriate revenue accounts in the general ledger."]
+  ],
+  steps:[
+   ["Application","Determine whether the business is subject to the town's licensing requirement."],
+   ["Classification","Use the correct business classification because it may affect the calculation."],
+   ["Calculation","Apply the adopted current-year rate/fee schedule."],
+   ["Issuance","Do not issue until required information, approvals and payment conditions are satisfied."]
+  ],
+  links:[["GFOA Best Practices","https://www.gfoa.org/best-practices"]]
+ },
+ gl:{
+  name:"General Ledger / Finance",icon:"📊",
+  intro:"Your job is to keep the town's books complete, balanced and supportable. The general ledger should accurately summarize activity coming from payroll, AP, utilities, taxes, cash receipts and other systems.",
+  tasks:[
+   ["Daily / weekly","Review interfaces and journal entries","Make sure subsidiary systems post to the intended funds/accounts and that rejected or unposted batches are resolved."],
+   ["Monthly","Reconcile cash and control accounts","Bank cash, payroll liabilities, AP, receivables and other control accounts should agree to supporting detail."],
+   ["Monthly","Review budget vs actual","Investigate unusual balances, over-budget accounts and miscoded transactions."],
+   ["Monthly","Close the accounting period","Post needed entries, complete reconciliations and retain close documentation before locking/closing the period."],
+   ["Fiscal year-end","Prepare year-end close","Complete accruals, cutoff, receivable/payable review, fixed asset activity and audit schedules."],
+   ["Annually","Support financial reporting/audit","Maintain schedules and documentation so reported balances can be traced back to the ledger and source records."]
+  ],
+  steps:[
+   ["Every journal entry","Use a clear explanation and supporting documentation."],
+   ["Every control account","The GL balance should agree to an independent supporting schedule or subsidiary ledger."],
+   ["Before closing","Resolve unexplained differences rather than carrying them forward."],
+   ["Audit trail","Someone reviewing later should be able to understand who posted it, why, and what supports it."]
+  ],
+  links:[["GASB","https://www.gasb.org/"],["GFOA Best Practices","https://www.gfoa.org/best-practices"],["GFOA Accounting Courses","https://www.gfoa.org/accounting-courses"]]
+ },
+ bank:{
+  name:"Bank Reconciliation",icon:"🏦",
+  intro:"Your job is to prove that the town's book cash balance and the bank's balance agree after accounting for legitimate timing differences and corrections.",
+  tasks:[
+   ["As statements arrive","Obtain complete bank activity","Use the bank statement, cleared check/EFT information, deposits and bank adjustments."],
+   ["Monthly","Clear matched transactions","Match checks, ACH/EFT items, deposits and other transactions to the accounting records."],
+   ["Monthly","Investigate unmatched items","Research old outstanding checks, missing deposits, bank fees, interest and transactions that exist only on one side."],
+   ["Monthly","Post required adjustments","Record legitimate bank charges, interest or corrections with documentation and approval."],
+   ["Monthly","Complete and retain reconciliation","Adjusted bank balance and adjusted book balance should agree exactly; retain the reconciliation and supporting statement."]
+  ],
+  steps:[
+   ["Start with two independent balances","Bank balance and book/GL cash balance."],
+   ["Identify timing differences","Outstanding checks and deposits in transit usually explain legitimate differences."],
+   ["Identify errors","Anything unexplained should be researched, not plugged."],
+   ["Finish with proof","The adjusted bank and book balances must agree, and the reconciled book balance must agree to the GL."]
+  ],
+  links:[["GFOA Best Practices","https://www.gfoa.org/best-practices"]]
+ }
+};
+
+function renderJobGuide(key){
+ const j=JOBS[key];
+ const rows=j.tasks.map(([f,n,d])=>`<div class="taskrow searchable" data-search="${j.name} ${f} ${n} ${d}"><div class="taskfreq">${f}</div><div><b>${n}</b><span>${d}</span></div></div>`).join("");
+ const steps=j.steps.map(([n,d])=>`<div class="guideStep"><b>${n}</b><span>${d}</span></div>`).join("");
+ const links=j.links.map(([n,u])=>`<a class="link" target="_blank" rel="noopener" href="${u}"><span>${n}</span><span>↗</span></a>`).join("");
+ document.getElementById("jobGuideContent").innerHTML=`
+ <div class="card">
+   <div class="jobHero"><div><div class="label">Municipal job guide</div><h2 style="margin-top:3px">${j.name}</h2><p>${j.intro}</p></div><div class="jobIcon">${j.icon}</div></div>
+ </div>
+ <section>
+   <div class="section-title"><h2>Your recurring responsibilities</h2><div class="sub">What should happen and how often</div></div>
+   <div class="timeline">${rows}</div>
+ </section>
+ <section>
+   <div class="section-title"><h2>How to think about the job</h2><div class="sub">A practical workflow, not just software clicks</div></div>
+   <div class="card">${steps}</div>
+ </section>
+ <section>
+   <div class="section-title"><h2>Official / professional references</h2><div class="sub">Use these when rules or due dates matter</div></div>
+   <div class="card"><div class="linklist">${links}</div></div>
+ </section>
+ <div class="callout" style="margin-top:12px"><b>Important:</b> Your town's adopted policies, ordinances, internal controls, state law and federal requirements can add or change responsibilities. This guide teaches the workflow, but the official rule controls when there is a conflict.</div>`;
+ applySearch();
+}
+
+const PAYROLL_STATE={
+ VA:{label:"Virginia",income:"Use Virginia employer withholding tables effective for wages paid after July 1, 2025.",url:"https://www.tax.virginia.gov/sites/default/files/taxforms/withholding/any/employer-withholding-tables-july-2025-and-later-any.pdf",ret:"VRS/local plan rate varies by employer and plan."},
+ TN:{label:"Tennessee",income:"No Tennessee individual income-tax withholding on earned wages.",url:"https://revenue.support.tn.gov/hc/en-us/articles/360057595051-GEN-34-Income-Tax-Withholding",ret:"Use the applicable TCRS participating-employer plan."},
+ NC:{label:"North Carolina",income:"Use the 2026 NC-30 employer withholding publication. The 2026 individual income-tax rate is 3.99%, but withholding still depends on the official method.",url:"https://www.ncdor.gov/income-tax-withholding-tables-and-instructions-employers",ret:"Use the applicable LGERS/NC Retirement Systems employer rate."},
+ SC:{label:"South Carolina",income:"Use South Carolina's 2026 withholding tables/formula and the employee's SC W-4 information.",url:"https://dor.sc.gov/withholding/withholding-forms",ret:"SCRS member contribution is 9% for covered members; verify employer components and plan applicability."},
+ GA:{label:"Georgia",income:"Use Georgia's 2026 Employer's Tax Guide and employee withholding certificate.",url:"https://dor.georgia.gov/employers-tax-guide",ret:"Retirement rate depends on the applicable Georgia public retirement system and employee group."},
+ AL:{label:"Alabama",income:"Use Alabama's current employer withholding instructions/tables and employee withholding certificate.",url:"https://www.revenue.alabama.gov/tax-types/income-tax-withholding/",ret:"RSA contribution rate depends on tier, employee class and participating employer."},
+ WV:{label:"West Virginia",income:"Use West Virginia's 2026 employer withholding tables and employee withholding certificate.",url:"https://tax.wv.gov/business/withholding/pages/withholdingtaxforms.aspx",ret:"PERS/member and employer requirements depend on plan rules and employee group."}
+};
+
+function money(n){return new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(Number.isFinite(n)?n:0)}
+function num(id){const v=parseFloat(document.getElementById(id).value);return Number.isFinite(v)&&v>0?v:0}
+
+function runPayrollReference(){
+ const state=document.getElementById("calcState").value;
+ const st=PAYROLL_STATE[state];
+ const gross=num("grossPay");
+ const ssTaxable=Math.min(num("ssTaxable"),gross||num("ssTaxable"));
+ const medTaxable=Math.min(num("medTaxable"),gross||num("medTaxable"));
+ const ssYtd=num("ssYtd"), medYtd=num("medYtd");
+ const retirementRate=Math.min(num("retRate"),100);
+ const otherDed=num("otherDed");
+ const extra=num("extraWh");
+
+ const ssRemaining=Math.max(0,184500-ssYtd);
+ const ssSubject=Math.min(ssTaxable,ssRemaining);
+ const ssEmp=ssSubject*.062;
+ const ssEmployer=ssEmp;
+
+ const medicare=medTaxable*.0145;
+ const medicareEmployer=medicare;
+
+ const addMedBefore=Math.max(0,medYtd-200000);
+ const addMedAfter=Math.max(0,medYtd+medTaxable-200000);
+ const addMed=(addMedAfter-addMedBefore)*.009;
+
+ const retirement=gross*(retirementRate/100);
+ const knownEmployee=ssEmp+medicare+addMed+retirement+otherDed+extra;
+ const beforeIncome=Math.max(0,gross-knownEmployee);
+
+ const ssCapNote=ssSubject<ssTaxable
+   ? `<div class="warn" style="margin-top:9px"><b>Social Security wage-base cap reached.</b> Only ${money(ssSubject)} of this check's entered Social Security taxable wages are subject to the 6.2% employee/employer tax because 2026 Social Security wages are capped at $184,500.</div>`
+   : "";
+
+ const addMedNote=addMed>0
+   ? `<div class="warn" style="margin-top:9px"><b>Additional Medicare triggered.</b> This check crosses or is above the employer withholding threshold of $200,000 in Medicare wages. The calculated additional employee withholding is ${money(addMed)}.</div>`
+   : "";
+
+ document.getElementById("calcResults").innerHTML=`
+ <div class="grid">
+  <div class="card">
+    <div class="label">Employee-side calculated items</div>
+    <div class="calc-total"><span>Social Security</span><strong>${money(ssEmp)}</strong></div>
+    <div class="calc-total"><span>Medicare</span><strong>${money(medicare)}</strong></div>
+    <div class="calc-total"><span>Additional Medicare</span><strong>${money(addMed)}</strong></div>
+    <div class="calc-total"><span>Retirement (${retirementRate.toFixed(2)}%)</span><strong>${money(retirement)}</strong></div>
+    <div class="calc-total"><span>Other entered deductions</span><strong>${money(otherDed)}</strong></div>
+    <div class="calc-total"><span>W-4 extra withholding entered</span><strong>${money(extra)}</strong></div>
+    <div class="calc-total"><span><b>Gross less known calculated/entered items</b><br><small style="color:var(--muted)">Before regular federal & state income-tax withholding</small></span><strong>${money(beforeIncome)}</strong></div>
+    ${ssCapNote}${addMedNote}
+  </div>
+  <div class="card">
+    <div class="label">Employer-side FICA reference</div>
+    <div class="calc-total"><span>Employer Social Security</span><strong>${money(ssEmployer)}</strong></div>
+    <div class="calc-total"><span>Employer Medicare</span><strong>${money(medicareEmployer)}</strong></div>
+    <div class="calc-total"><span>Additional Medicare employer match</span><strong>$0.00</strong></div>
+    <p style="margin-top:9px">This does not include FUTA, state unemployment, workers' compensation, retirement employer contributions, insurance, or other employer costs.</p>
+  </div>
+ </div>
+ <div class="card" style="margin-top:11px">
+   <h3>Federal income-tax lookup</h3>
+   <p><b>${document.getElementById("fedStatus").value}</b> • Step 2 checkbox: <b>${document.getElementById("step2").value==="yes"?"Checked":"Not checked"}</b> • Step 3 credits entered: <b>${money(num("dependents"))}</b>.</p>
+   <p>Use 2026 IRS Publication 15-T to calculate regular federal income-tax withholding. This app does not guess the missing W-4 inputs.</p>
+   <div class="linklist"><a class="link" target="_blank" rel="noopener" href="https://www.irs.gov/publications/p15t"><span>Open 2026 IRS Publication 15-T</span><span>↗</span></a></div>
+ </div>
+ <div class="card" style="margin-top:11px">
+   <h3>${st.label} withholding & retirement check</h3>
+   <p>${st.income}</p>
+   <p><b>Retirement:</b> ${st.ret}</p>
+   <div class="linklist"><a class="link" target="_blank" rel="noopener" href="${st.url}"><span>Open official ${st.label} withholding source</span><span>↗</span></a></div>
+ </div>
+ <div class="callout" style="margin-top:11px"><b>Troubleshooting sequence:</b> compare taxable wages → verify FICA YTD limits → verify employee retirement setup → verify W-4/state certificate → calculate federal/state withholding from the official current table → compare the software result penny-for-penny.</div>`;
+}
+
+const qs=s=>document.querySelector(s), qsa=s=>[...document.querySelectorAll(s)];
+const stateSelect=qs("#stateSelect"), stateContent=qs("#stateContent"), homeStates=qs("#homeStates"), search=qs("#search");
+const jobSelect=qs("#jobSelect");
+jobSelect.innerHTML=Object.entries(JOBS).map(([k,j])=>`<option value="${k}">${j.name}</option>`).join("");
+jobSelect.addEventListener("change",()=>renderJobGuide(jobSelect.value));
+renderJobGuide("payroll");
+
+const calcState=qs("#calcState");
+calcState.innerHTML=Object.entries(PAYROLL_STATE).map(([c,s])=>`<option value="${c}">${s.label}</option>`).join("");
+qs("#runCalc").addEventListener("click",runPayrollReference);
+
+stateSelect.innerHTML=Object.entries(S).map(([c,s])=>`<option value="${c}">${s.name}</option>`).join("");
+homeStates.innerHTML=Object.entries(S).map(([c,s])=>`<button type="button" class="state-btn searchable" data-search="${s.name} ${c} payroll retirement tax" data-state="${c}"><div class="abbr">${c}</div><strong>${s.name}</strong><span>${s.quick}</span></button>`).join("");
+qs("#federalResources").innerHTML=FED.map(([n,d,u,i,b])=>`<a class="resource-card searchable" data-search="${n} ${d} ${b}" target="_blank" rel="noopener" href="${u}"><div class="icon">${i}</div><strong>${n}</strong><small>${d}</small><span class="badge">${b}</span></a>`).join("");
+
+let selectedCategory="Payroll";
+function renderState(code){
+ const s=S[code]; stateSelect.value=code;
+ const cats=Object.keys(s.cats); if(!cats.includes(selectedCategory)) selectedCategory=cats[0];
+ const resources=s.cats[selectedCategory]||[];
+ stateContent.innerHTML=`<div class="card" style="margin-top:10px">
+   <div class="state-head"><div><div class="label">${code} resource dashboard</div><h2 style="margin-top:3px">${s.name}</h2><p>${s.note}</p></div><div class="state-logo">${code}</div></div>
+ </div>
+ <div class="categories" style="margin-top:10px">${cats.map(c=>`<button type="button" class="chipbtn ${c===selectedCategory?"active":""}" data-cat="${c}">${c}</button>`).join("")}</div>
+ <div class="resources">${resources.map(([n,d,u])=>`<a class="resource-card searchable" data-search="${s.name} ${selectedCategory} ${n} ${d}" target="_blank" rel="noopener" href="${u}"><div class="icon">${ICONS[selectedCategory]||"🔗"}</div><strong>${n}</strong><small>${d}</small><span class="badge">${selectedCategory}</span></a>`).join("")}</div>
+ <div class="callout" style="margin-top:12px"><b>Support reminder:</b> verify the effective date and employee/employer group on the official source before entering a rate or table into your software.</div>`;
+ applySearch();
+}
+
+function showView(v){
+ qsa(".view").forEach(x=>x.classList.toggle("hidden",x.dataset.view!==v));
+ qsa(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===v));
+ qs("#noResults").classList.add("hidden");
+ window.scrollTo({top:0,behavior:"smooth"});
+ applySearch();
+}
+qsa(".nav button").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+homeStates.addEventListener("click",e=>{const b=e.target.closest("[data-state]");if(!b)return;selectedCategory="Payroll";renderState(b.dataset.state);showView("states")});
+stateSelect.addEventListener("change",()=>{selectedCategory="Payroll";renderState(stateSelect.value)});
+stateContent.addEventListener("click",e=>{const b=e.target.closest("[data-cat]");if(!b)return;selectedCategory=b.dataset.cat;renderState(stateSelect.value)});
+
+function applySearch(){
+ const q=search.value.trim().toLowerCase();
+ const view=qsa(".view").find(v=>!v.classList.contains("hidden"));
+ if(!view)return;
+ let shown=0;
+ view.querySelectorAll(".searchable").forEach(el=>{
+   const hay=(el.dataset.search+" "+el.textContent).toLowerCase();
+   const ok=!q||q.split(/\s+/).every(t=>hay.includes(t));
+   el.classList.toggle("hidden",!ok); if(ok)shown++;
+ });
+ qs("#noResults").classList.toggle("hidden",!q||shown>0);
+}
+search.addEventListener("input",applySearch);
+
+let lastGross=2000;
+qs("#grossPay").addEventListener("input",()=>{
+ const g=num("grossPay");
+ const ss=qs("#ssTaxable"), med=qs("#medTaxable");
+ if(Math.abs(parseFloat(ss.value||0)-lastGross)<0.005) ss.value=g.toFixed(2);
+ if(Math.abs(parseFloat(med.value||0)-lastGross)<0.005) med.value=g.toFixed(2);
+ lastGross=g;
+});
+
+renderState("VA");
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))}
+</script>
+</body>
+</html>
