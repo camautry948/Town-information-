@@ -1,9 +1,0 @@
-{
-  "name": "Municipal Finance & Job Guide",
-  "short_name": "Municipal Guide",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#f5f7f9",
-  "theme_color": "#173b57",
-  "description": "Self-service municipal job guide and official finance, payroll, tax and accounting resource hub."
-}
