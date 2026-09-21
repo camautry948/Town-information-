@@ -1,0 +1,9 @@
+{
+  "name": "Municipal Resource & Training Center",
+  "short_name": "Municipal Center",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f7f9",
+  "theme_color": "#173b57",
+  "description": "Municipal finance resources with 2025/2026 payroll tax tables, rates, retirement references and training."
+}
